@@ -1,38 +1,22 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {
-  Camera,
-  useCameraDevice,
-  useCameraPermission,
-} from 'react-native-vision-camera';
+import {Button, StyleSheet, View} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useCameraPermission} from 'react-native-vision-camera';
+import {CameraPage} from './CameraPage';
 
 function App(): React.JSX.Element {
   const {hasPermission, requestPermission} = useCameraPermission();
-  const device = useCameraDevice('back', {
-    // Triple Camera if available - if not, it will find the closest matching camera (e.g. dual camera)
-    physicalDevices: [
-      'ultra-wide-angle-camera',
-      'wide-angle-camera',
-      'telephoto-camera',
-    ],
-  });
 
   return (
-    <View style={styles.container}>
-      {hasPermission ? (
-        device != null ? (
-          <Camera
-            device={device}
-            isActive={true}
-            style={StyleSheet.absoluteFill}
-          />
+    <GestureHandlerRootView style={StyleSheet.absoluteFill}>
+      <View style={styles.container}>
+        {hasPermission ? (
+          <CameraPage />
         ) : (
-          <Text>Your phone doesn't have a Camera</Text>
-        )
-      ) : (
-        <Button title="Grant Permission" onPress={requestPermission} />
-      )}
-    </View>
+          <Button title="Grant Permission" onPress={requestPermission} />
+        )}
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
